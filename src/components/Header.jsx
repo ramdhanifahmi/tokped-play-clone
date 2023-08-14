@@ -29,7 +29,7 @@ const Header = ({ children }) => {
             return;
         }
 
-        axios.get(`http://localhost:3000/api/products?title=${value}`)
+        axios.get(`${import.meta.env.VITE_CLIENT_URL}/api/products?title=${value}`)
             .then((res) => {
                 setSearchResults(res.data);
                 setShowSearchResults(true); // Show the search results when there are results
