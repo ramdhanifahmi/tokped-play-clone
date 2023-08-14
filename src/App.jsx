@@ -6,13 +6,12 @@ import axios from "axios";
 import Header from "./components/Header.jsx";
 import HomePage from "./components/HomePage.jsx";
 
-
 const App = () => {
     const [videos, setVideos] = useState([]);
     const [selectedVideoId, setSelectedVideoId] = useState(null);
 
     useEffect(() => {
-        axios.get('http://localhost:3000/api/videos')
+        axios.get(`${import.meta.env.VITE_CLIENT_URL}/api/videos`)
             .then((res) => {
                 setVideos(res.data);
             })

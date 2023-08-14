@@ -17,7 +17,7 @@ const ImageDetailPage = () => {
 
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/api/videos?videoId=${videoId}`)
+        axios.get(`${import.meta.env.VITE_CLIENT_URL}/api/videos?videoId=${videoId}`)
             .then((res) => {
                 setVideoData(res.data);
                 console.log(JSON.stringify(res.data))
@@ -26,7 +26,7 @@ const ImageDetailPage = () => {
                 console.error('Error fetching video data:', error);
             });
 
-        axios.get(`http://localhost:3000/api/comments?videoId=${videoId}`)
+        axios.get(`${import.meta.env.VITE_CLIENT_URL}/api/comments?videoId=${videoId}`)
             .then((res) => {
                 setComments(res.data);
             })
@@ -43,7 +43,7 @@ const ImageDetailPage = () => {
             });
 
         // Get products
-        axios.get(`http://localhost:3000/api/products?videoId=${videoId}`)
+        axios.get(`${import.meta.env.VITE_CLIENT_URL}/api/products?videoId=${videoId}`)
             .then((res) => {
                 setProducts(res.data);
             })
@@ -68,11 +68,11 @@ const ImageDetailPage = () => {
             comment: inputRef.current.value,
         };
 
-        axios.post(`http://localhost:3000/api/comments`, commentData)
+        axios.post(`${import.meta.env.VITE_CLIENT_URL}/api/comments`, commentData)
             .then((res) => {
                 if (res.data.success) {
                     // Update comments after submitting a new comment
-                    axios.get(`http://localhost:3000/api/comments?videoId=${videoId}`)
+                    axios.get(`${import.meta.env.VITE_CLIENT_URL}/api/comments?videoId=${videoId}`)
                         .then((res) => {
                             setComments(res.data);
                         })
