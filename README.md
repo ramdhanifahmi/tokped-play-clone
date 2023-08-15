@@ -1,12 +1,16 @@
 # tokped-play-clone
-Project Description: A web application for sharing and viewing videos and related products.
-
+Project Description: A web application like tokopedia play that limited for viewing videos and related products, and comment about the products.
+In this App, user required to input their username in login page. User can not bypass the login page.
 ## Features
 
-- View a list of videos and their associated products.
+- View the list of products in home page
 - Click on a image in homepage to view its details video of products and associated products.
+- Submit comment with username input is readOnly that fetch from your username login.
 - Click 'Lihat produk' in detail product to open new tab that will direct you to the link product
-- Search for products by title.
+
+## Additinal Features
+- Dynamic search for products by title.
+- User profile and username in header. Username is get from user login
 
 ## How to Install & Run
 1. Clone the repository

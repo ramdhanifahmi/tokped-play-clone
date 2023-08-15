@@ -1,8 +1,18 @@
 import {Box, Grid, Image, Text} from "@chakra-ui/react";
-import {Link} from "react-router-dom";
-import React from "react";
+import {Link, useNavigate} from "react-router-dom";
+import React, {useEffect} from "react";
+import {useUserContext} from "../UserContext.jsx";
 
 const HomePage = ({ videos, handleClickImage }) => {
+    const navigate = useNavigate();
+    const { user } = useUserContext();
+
+    useEffect(() => {
+        if (!user) {
+            navigate('/');
+        }
+    }, [user, navigate]);
+
     return (
         <Content>
             <Grid templateColumns="repeat(5, 1fr)" gap={4}>

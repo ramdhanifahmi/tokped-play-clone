@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import {useParams, Link, useNavigate} from 'react-router-dom';
 import { Heading, Text, Button, Flex, Textarea, Box, FormControl, FormLabel, Input, FormErrorMessage, VStack } from '@chakra-ui/react';
 import axios from 'axios';
+import {useUserContext} from "../UserContext.jsx";
 
 const ImageDetailPage = () => {
     const { videoId } = useParams();
@@ -13,8 +14,15 @@ const ImageDetailPage = () => {
     const [usernameError, setUsernameError] = useState('');
     const [commentError, setCommentError] = useState('');
     const [products, setProducts] = useState([]);
+    const { user, logout } = useUserContext();
 
+    const navigate = useNavigate();
 
+    useEffect(() => {
+        if (!user) {
+            navigate('/');
+        }
+    }, [user, navigate]);
 
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_CLIENT_URL}/api/videos?videoId=${videoId}`)
@@ -53,9 +61,13 @@ const ImageDetailPage = () => {
     }, [videoId]);
 
     const handleCommentSubmit = () => {
-        if (!username || !inputRef.current.value) {
-            if (!username) setUsernameError('Username is required.');
-            if (!inputRef.current.value) setCommentError('Comment is required.');
+        if (!user && !username) {
+            setUsernameError('Username is required.');
+            return;
+        }
+
+        if (!inputRef.current.value) {
+            setCommentError('Comment is required.');
             return;
         }
 
@@ -64,7 +76,7 @@ const ImageDetailPage = () => {
 
         const commentData = {
             videoId: videoId,
-            userName: username,
+            userName: user || username,
             comment: inputRef.current.value,
         };
 
@@ -170,11 +182,12 @@ const ImageDetailPage = () => {
                         <FormLabel color="white">Username</FormLabel>
                         <Input
                             type="text"
-                            value={username}
+                            defaultValue={user || ''}
                             onChange={(e) => handleUsernameChange(e.target.value)}
                             bg="gray.600"
                             color="white"
                             _placeholder={{ color: 'gray.400' }}
+                            readOnly={user !== undefined && user !== null && user !== ''}
                         />
                         <FormErrorMessage color="red">{usernameError}</FormErrorMessage>
                     </FormControl>
@@ -192,7 +205,7 @@ const ImageDetailPage = () => {
                     <Button
                         onClick={handleCommentSubmit}
                         colorScheme="blue"
-                        w="100%" // Set the width to 100% to match input width
+                        w="100%"
                     >
                         Submit
                     </Button>

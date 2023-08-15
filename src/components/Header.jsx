@@ -8,17 +8,29 @@ import {
     InputRightElement,
     IconButton,
     VStack,
-    Text
+    Text, Avatar, MenuItem, MenuList, MenuButton, Menu
 } from '@chakra-ui/react';
-import { SearchIcon } from '@chakra-ui/icons';
+import {ChevronDownIcon, SearchIcon} from '@chakra-ui/icons';
 import tokopediaPlayIcon from '../assets/tokopedia.png';
-import { Link } from 'react-router-dom';
-import axios from "axios";
+import stichAvatar from '../assets/stitch.png';
 
-const Header = ({ children }) => {
+import {Link, useNavigate} from 'react-router-dom';
+import axios from "axios";
+import {useUserContext} from "../UserContext.jsx";
+
+const Header = () => {
     const [searchValue, setSearchValue] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [showSearchResults, setShowSearchResults] = useState(false);
+    const inputRef = useRef(null);
+    const navigate = useNavigate();
+
+    const { user, logout } = useUserContext();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/');
+    };
 
     const handleSearch = (value) => {
         setSearchValue(value);
@@ -57,7 +69,7 @@ const Header = ({ children }) => {
             <Flex alignItems="center" justifyContent="space-between">
                 <Image src={tokopediaPlayIcon} alt="Tokopedia Play Icon" maxW="20vh" ml="10" />
                 <Box flex="1" textAlign="center" margin="10px" maxW="60vh">
-                    <InputGroup size="md">
+                    <InputGroup size="md" ref={inputRef}>
                         <Input
                             pr="2.5rem"
                             placeholder="Search products..."
@@ -94,7 +106,7 @@ const Header = ({ children }) => {
                         borderRadius="md"
                         boxShadow="md"
                         minW="60vh"
-                        left="54%"
+                        left="50%"
                         transform="translateX(-50%)"
                         display={showSearchResults ? 'block' : 'none'}
                         textAlign="left"
@@ -115,12 +127,26 @@ const Header = ({ children }) => {
                         )}
                     </VStack>
                 </Box>
-                <Link
-                    to="/"
-                    style={{ fontSize: '20px', color: 'white', textDecoration: 'none', marginRight: '20px' }}
-                >
-                    Home
-                </Link>
+                <Box display="flex" alignItems="center">
+                    <Link
+                        to="/home"
+                        style={{ fontSize: '20px', color: 'white', textDecoration: 'none', marginRight: '20px' }}
+                    >
+                        Home
+                    </Link>
+                    <Text fontSize="20px" color="white" mr="5">Hello, {user || ''}!</Text>
+                    <Menu>
+                        <MenuButton as={Avatar} size="sm" name={user || ''} src={stichAvatar}>
+                            <ChevronDownIcon />
+                        </MenuButton>
+                        <MenuList>
+                            <MenuItem onClick={handleLogout} color="green">
+                                Log out
+                            </MenuItem>
+                        </MenuList>
+                    </Menu>
+                </Box>
+
             </Flex>
         </Box>
     );
